@@ -1,0 +1,10 @@
+<!DOCTYPE beans PUBLIC "-//SPRING//DTD BEAN//EN" "http://www.springframework.org/dtd/spring-beans.dtd">
+<beans>
+	<bean id="manager" class="edu.mcw.rgd.pipelines.UpdateTermsInFULLANNOT">
+        <property name="version" value="UpdateTermsInFullAnnot v. 2.3.4 (Aug 10, 2018)" />
+        <property name="lastModifiedBy" value="172" />
+        <property name="fixMissingHardLinks" value="true" />
+	</bean>
+</beans>
+
+

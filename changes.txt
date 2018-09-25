@@ -1,0 +1,29 @@
+v. 2.3.4, Sep 25, 2018
+  - moved from subversion to github
+
+v. 2.3.3, Aug 10, 2018
+  - added 'summary.log' to replace System.out.println
+
+v. 2.3.2, Sep 25, 2017
+  - updated to log4j2
+
+v. 2.3.1, Jun 21, 2017
+  - updated to use JDK 8; minor update to show total run time
+
+v. 2.3.0, Nov 7, 2016
+  - upgraded build scripts from ant to gradle
+
+v. 2.2.2, Jun 23, 2016
+  - missing reference hard links are automatically created for JOURNAL ARTICLE annotations -- per RGDD-1235
+
+v. 2.2.1, Jun 17, 2016
+  - hard links are no longer inserted into db, they are only reported
+
+v. 2.2, Aug 19, 2015
+  - updated jars
+  - added module to fix term aspect -- per RGDD-1118
+
+v. 2.1, Aug 19, 2015
+  - updated jars
+  - improved summary emails
+  - simplified code by using log4j to track inserts to RGD_REF_RGD_ID table
