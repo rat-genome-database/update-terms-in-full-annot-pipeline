@@ -16,9 +16,8 @@ if [ "$SERVER" == "REED" ]; then
     ELIST="rgd.developers@mcw.edu,jrsmith@mcw.edu"
 fi
 
-DB_OPTS="-Dspring.config=$APPDIR/../properties/default_db.xml"
-LOG4J_OPTS="-Dlog4j.configurationFile=file://$APPDIR/properties/log4j2.xml"
-declare -x "UPDATE_TERMS_IN_FULLANNOT_OPTS=$DB_OPTS $LOG4J_OPTS"
-bin/$APPNAME "$@" 2>&1 > cron.log
+java -Dspring.config=$APPDIR/../properties/default_db.xml \
+    -Dlog4j.configurationFile=file://$APPDIR/properties/log4j2.xml \
+    -jar lib/${APPNAME}.jar  "$@" 2>&1 > cron.log
 
-mailx -s "[$SERVER] Update Terms in FULL_ANNOT table" rgd.developers@mcw.edu,jrsmith@mcw.edu < $APPDIR/log/summary.log
+mailx -s "[$SERVER] Update Terms in FULL_ANNOT table" $ELIST < $APPDIR/log/summary.log
