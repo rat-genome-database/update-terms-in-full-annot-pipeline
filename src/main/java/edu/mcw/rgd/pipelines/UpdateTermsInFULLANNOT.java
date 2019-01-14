@@ -10,6 +10,7 @@ import org.springframework.core.io.FileSystemResource;
 
 import java.io.ByteArrayOutputStream;
 import java.io.PrintStream;
+import java.text.SimpleDateFormat;
 import java.util.*;
 import java.util.Date;
 
@@ -28,7 +29,6 @@ public class UpdateTermsInFULLANNOT {
     private int lastModifiedBy;
     private UpdateTermsInFullAnnotDao dao = new UpdateTermsInFullAnnotDao();
     Logger log = LogManager.getLogger("fullAnnot");
-    Logger logSummary = LogManager.getLogger("summary");
     Logger logRef = LogManager.getLogger("insertRefRgdId");
     Logger logAspect = LogManager.getLogger("aspectFixes");
     private boolean fixMissingHardLinks;
@@ -45,7 +45,7 @@ public class UpdateTermsInFULLANNOT {
             // print stack trace to error stream
             ByteArrayOutputStream bs = new ByteArrayOutputStream();
             e.printStackTrace(new PrintStream(bs));
-            manager.logSummary.error(bs.toString());
+            manager.log.error(bs.toString());
             throw e;
         }
     }
@@ -54,19 +54,21 @@ public class UpdateTermsInFULLANNOT {
 
         long time0 = System.currentTimeMillis();
 
-        logSummary.info(getVersion());
-        logSummary.info(dao.getConnectionInfo());
-        logSummary.info("");
+        log.info(getVersion());
+        log.info("   "+dao.getConnectionInfo());
+        SimpleDateFormat sdt = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        log.info("   started at "+sdt.format(new Date(time0)));
 
         fixTermAspect();
         fixTermNames();
         fixMissingRefHardLinks();
 
-        logSummary.info("=== OK === elapsed "+Utils.formatElapsedTime(time0, System.currentTimeMillis()));
-        logSummary.info("");
+        log.info("=== OK === elapsed "+Utils.formatElapsedTime(time0, System.currentTimeMillis()));
+        log.info("");
     }
 
     void fixTermNames() throws Exception {
+        log.info("");
         Set<String> updatedTermNames = new TreeSet<>();
 
         int rowsUpdated = 0;
@@ -76,7 +78,7 @@ public class UpdateTermsInFULLANNOT {
             // get the correct term name
             Term term = dao.getTermByAccId(annot.getTermAcc());
             if( term==null ) {
-                logSummary.error("ERROR: Failed to read term "+annot.getTermAcc());
+                log.error("ERROR: Failed to read term "+annot.getTermAcc());
                 continue;
             }
 
@@ -95,14 +97,14 @@ public class UpdateTermsInFULLANNOT {
             }
         }
 
-        logSummary.info("Annotations with term updates in FULL_ANNOT = " + rowsUpdated);
+        log.info("Annotations with term updates in FULL_ANNOT = " + rowsUpdated);
         if( conflictAnnotsDeleted!=0 )
-            logSummary.info("Duplicate Annotations Deleted = " + conflictAnnotsDeleted);
+            log.info("Duplicate Annotations Deleted = " + conflictAnnotsDeleted);
 
         // dump changed terms
-        logSummary.info("Updated term names = "+updatedTermNames.size());
+        log.info("Updated term names = "+updatedTermNames.size());
         for( String updatedTermName: updatedTermNames ) {
-            logSummary.info(updatedTermName);
+            log.info(updatedTermName);
         }
     }
 
@@ -148,6 +150,7 @@ public class UpdateTermsInFULLANNOT {
     }
 
     void fixTermAspect() throws Exception {
+        log.info("");
 
         Map<String,String> ontologyIdToAspectMap = dao.getOntologyIdToAspectMap();
 
@@ -160,7 +163,7 @@ public class UpdateTermsInFULLANNOT {
             // get the correct term name
             Term term = dao.getTermByAccId(annot.getTermAcc());
             if( term==null ) {
-                logSummary.warn("ERROR: Failed to read term "+annot.getTermAcc());
+                log.warn("ERROR: Failed to read term "+annot.getTermAcc());
                 continue;
             }
 
@@ -183,11 +186,11 @@ public class UpdateTermsInFULLANNOT {
             }
         }
 
-        logSummary.info("Annotations with aspect updates in FULL_ANNOT = " + rowsUpdated);
+        log.info("Annotations with aspect updates in FULL_ANNOT = " + rowsUpdated);
 
         // dump changed aspects
         for( String updatedAspect: updatedAspects ) {
-            logSummary.info(updatedAspect);
+            log.info(updatedAspect);
         }
     }
 
@@ -200,6 +203,7 @@ public class UpdateTermsInFULLANNOT {
      * @throws Exception when something really bad in spring framework occurs
      */
     void fixMissingRefHardLinks() throws Exception {
+        log.info("");
 
         String msg;
 
@@ -225,7 +229,7 @@ public class UpdateTermsInFULLANNOT {
         } else {
             msg = "Reference hard links that could be added to RGD_REF_RGD_ID: " + rowsAffected;
         }
-        logSummary.info(msg);
+        log.info(msg);
         logRef.info(msg);
     }
 
