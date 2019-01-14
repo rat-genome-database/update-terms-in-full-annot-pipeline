@@ -20,4 +20,4 @@ java -Dspring.config=$APPDIR/../properties/default_db.xml \
     -Dlog4j.configurationFile=file://$APPDIR/properties/log4j2.xml \
     -jar lib/${APPNAME}.jar  "$@" 2>&1 > cron.log
 
-mailx -s "[$SERVER] Update Terms in FULL_ANNOT table" $ELIST < $APPDIR/log/summary.log
+mailx -s "[$SERVER] Update Terms in FULL_ANNOT table" $ELIST < $APPDIR/log/synopsis.log

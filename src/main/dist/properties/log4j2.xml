@@ -22,12 +22,16 @@
                 <TimeBasedTriggeringPolicy interval="1"/>
             </Policies>
         </RollingFile>
-        <RollingFile name="summary" append="true" fileName="log/summary.log" filePattern="log/summary.log.%d{yyyy-MM-dd}">
+        <RollingFile name="summary" append="true" fileName="log/summary.log" filePattern="log/summary.log.%d{yyyy-MM}">
+            <ThresholdFilter level="INFO" onMatch="ACCEPT" onMismatch="DENY"/>
             <PatternLayout pattern="[%d{yyyy-MM-dd HH:mm:ss}] - %m%n"/>
             <Policies>
                 <TimeBasedTriggeringPolicy interval="1"/>
             </Policies>
         </RollingFile>
+        <File name="synopsis"  append="false" fileName="log/synopsis.log">
+            <ThresholdFilter level="INFO" onMatch="ACCEPT" onMismatch="DENY"/>
+        </File>
         <RollingFile name="spring" append="true" fileName="log/spring.log" filePattern="log/spring.log.%d{yyyy-MM}">
             <PatternLayout pattern="[%d] - %m%n"/>
             <Policies>
@@ -40,10 +44,6 @@
         <Root level="INFO">
             <AppenderRef ref="Console"/>
         </Root>
-        <Logger name="fullAnnot" level="debug" additivity="false">
-            <AppenderRef ref="fullAnnot"/>
-            <AppenderRef ref="Console" level="info"/>
-        </Logger>
         <Logger name="aspectFixes" level="debug" additivity="false">
             <AppenderRef ref="aspectFixes"/>
             <AppenderRef ref="Console" level="info"/>
@@ -52,8 +52,10 @@
             <AppenderRef ref="insertRefRgdId"/>
             <AppenderRef ref="Console" level="info"/>
         </Logger>
-        <Logger name="summary" level="debug" additivity="false">
+        <Logger name="fullAnnot" level="debug" additivity="false">
+            <AppenderRef ref="fullAnnot"/>
             <AppenderRef ref="summary"/>
+            <AppenderRef ref="synopsis"/>
             <AppenderRef ref="Console" level="info"/>
         </Logger>
         <Logger name="org.springframework" level="info" additivity="false">
