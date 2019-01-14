@@ -58,7 +58,6 @@ public class UpdateTermsInFULLANNOT {
         log.info("   "+dao.getConnectionInfo());
         SimpleDateFormat sdt = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         log.info("   started at "+sdt.format(new Date(time0)));
-        log.info("");
 
         fixTermAspect();
         fixTermNames();
@@ -69,6 +68,7 @@ public class UpdateTermsInFULLANNOT {
     }
 
     void fixTermNames() throws Exception {
+        log.info("");
         Set<String> updatedTermNames = new TreeSet<>();
 
         int rowsUpdated = 0;
@@ -150,6 +150,7 @@ public class UpdateTermsInFULLANNOT {
     }
 
     void fixTermAspect() throws Exception {
+        log.info("");
 
         Map<String,String> ontologyIdToAspectMap = dao.getOntologyIdToAspectMap();
 
@@ -202,6 +203,7 @@ public class UpdateTermsInFULLANNOT {
      * @throws Exception when something really bad in spring framework occurs
      */
     void fixMissingRefHardLinks() throws Exception {
+        log.info("");
 
         String msg;
 
