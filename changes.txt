@@ -1,3 +1,6 @@
+Sep 25, 2019
+  - updated to commons-dbcp2.jar
+
 v. 2.3.6, Jan 14, 2019
   - tuned up logging
 
