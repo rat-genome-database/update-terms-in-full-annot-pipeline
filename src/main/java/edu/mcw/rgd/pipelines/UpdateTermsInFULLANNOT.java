@@ -69,7 +69,7 @@ public class UpdateTermsInFULLANNOT {
 
     void fixTermNames() throws Exception {
         log.info("");
-        Set<String> updatedTermNames = new TreeSet<>();
+        Map<String, Integer> updatedTermNames = new TreeMap<>();
 
         int rowsUpdated = 0;
         int conflictAnnotsDeleted = 0;
@@ -86,7 +86,14 @@ public class UpdateTermsInFULLANNOT {
 
             // log the changes
             log.debug("UPDATE FAKey= "+annot.getKey()+" FATermAcc= " + annot.getTermAcc()+" FATerm= " + annot.getTerm()+" OntTerm= " + term.getTerm());
-            updatedTermNames.add("  "+annot.getTermAcc()+": ["+annot.getTerm()+"] ==> ["+term.getTerm()+"]");
+            String termInfo = "  "+annot.getTermAcc()+": ["+annot.getTerm()+"] ==> ["+term.getTerm()+"]";
+            Integer cnt = updatedTermNames.get(termInfo);
+            if( cnt==null ) {
+                cnt = 1;
+            } else {
+                cnt++;
+            }
+            updatedTermNames.put(termInfo, cnt);
 
             // update the term name in annotation object
             annot.setLastModifiedDate(new Date());
@@ -101,10 +108,10 @@ public class UpdateTermsInFULLANNOT {
         if( conflictAnnotsDeleted!=0 )
             log.info("Duplicate Annotations Deleted = " + conflictAnnotsDeleted);
 
-        // dump changed terms
-        log.info("Updated term names = "+updatedTermNames.size());
-        for( String updatedTermName: updatedTermNames ) {
-            log.info(updatedTermName);
+        // dump changed terms with counts
+        log.info("Updated term names = "+updatedTermNames.size()+"       (annotation count)");
+        for( Map.Entry<String,Integer> entry: updatedTermNames.entrySet() ) {
+            log.info(entry.getKey()+"   ("+entry.getValue()+")");
         }
     }
 
