@@ -1,3 +1,6 @@
+Sep 23, 2020
+  updated ojdbc dependency (and others)
+
 May 10, 2020
   updated jar dependencies
 
