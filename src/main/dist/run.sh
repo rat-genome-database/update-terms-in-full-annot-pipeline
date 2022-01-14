@@ -13,7 +13,7 @@ cd $APPDIR
 
 ELIST=mtutaj@mcw.edu
 if [ "$SERVER" == "REED" ]; then
-    ELIST="rgd.developers@mcw.edu,jrsmith@mcw.edu"
+    ELIST="rgd.devops@mcw.edu,jrsmith@mcw.edu"
 fi
 
 java -Dspring.config=$APPDIR/../properties/default_db2.xml \

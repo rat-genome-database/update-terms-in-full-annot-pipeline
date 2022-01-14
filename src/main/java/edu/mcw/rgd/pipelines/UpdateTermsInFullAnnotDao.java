@@ -12,10 +12,8 @@ import java.util.List;
 import java.util.Map;
 
 /**
- * Created by IntelliJ IDEA.
- * User: mtutaj
- * Date: 12/27/12
- * Time: 11:37 AM
+ * @author mtutaj
+ * @since 12/27/12
  */
 public class UpdateTermsInFullAnnotDao {
 
