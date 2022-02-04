@@ -5,7 +5,7 @@
 # In addition add missing entries in RGD_REF_RGD_ID table for RGD-based annotations
 #
 . /etc/profile
-APPNAME=updateTermsInFULLANNOT
+APPNAME="update-terms-in-full-annot-pipeline"
 SERVER=`hostname -s | tr '[a-z]' '[A-Z]'`
 
 APPDIR=/home/rgddata/pipelines/$APPNAME
