@@ -1,7 +1,7 @@
 <!DOCTYPE beans PUBLIC "-//SPRING//DTD BEAN//EN" "http://www.springframework.org/dtd/spring-beans.dtd">
 <beans>
 	<bean id="manager" class="edu.mcw.rgd.pipelines.UpdateTermsInFULLANNOT">
-        <property name="version" value="UpdateTermsInFullAnnot   -- build Jan 10, 2023" />
+        <property name="version" value="UpdateTermsInFullAnnot   -- build Jan 16, 2023" />
         <property name="lastModifiedBy" value="172" />
         <property name="fixMissingHardLinks" value="true" />
 	</bean>
