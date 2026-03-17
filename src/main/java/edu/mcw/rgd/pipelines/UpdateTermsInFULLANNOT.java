@@ -1,6 +1,7 @@
 package edu.mcw.rgd.pipelines;
 import edu.mcw.rgd.datamodel.ontology.Annotation;
 import edu.mcw.rgd.datamodel.ontologyx.Term;
+import edu.mcw.rgd.process.MemoryMonitor;
 import edu.mcw.rgd.process.Utils;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -50,6 +51,9 @@ public class UpdateTermsInFULLANNOT {
 
         long time0 = System.currentTimeMillis();
 
+        MemoryMonitor memoryMonitor = new MemoryMonitor();
+        memoryMonitor.start();
+
         log.info(getVersion());
         log.info("   "+dao.getConnectionInfo());
         SimpleDateFormat sdt = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
@@ -58,6 +62,9 @@ public class UpdateTermsInFULLANNOT {
         fixTermAspect();
         fixTermNames();
         fixMissingRefHardLinks();
+
+        memoryMonitor.stop();
+        log.info(memoryMonitor.getSummary());
 
         log.info("=== OK === elapsed "+Utils.formatElapsedTime(time0, System.currentTimeMillis()));
         log.info("");
