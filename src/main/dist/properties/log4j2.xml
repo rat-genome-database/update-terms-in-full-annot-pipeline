@@ -22,6 +22,13 @@
                 <TimeBasedTriggeringPolicy interval="1"/>
             </Policies>
         </RollingFile>
+        <RollingFile name="status" append="true" fileName="logs/status.log" filePattern="logs/status.log.%d{yyyy-MM}">
+            <ThresholdFilter level="INFO" onMatch="ACCEPT" onMismatch="DENY"/>
+            <PatternLayout pattern="[%d{yyyy-MM-dd HH:mm:ss}] - %m%n"/>
+            <Policies>
+                <TimeBasedTriggeringPolicy interval="1"/>
+            </Policies>
+        </RollingFile>
         <RollingFile name="summary" append="true" fileName="logs/summary.log" filePattern="logs/summary.log.%d{yyyy-MM}">
             <ThresholdFilter level="INFO" onMatch="ACCEPT" onMismatch="DENY"/>
             <PatternLayout pattern="[%d{yyyy-MM-dd HH:mm:ss}] - %m%n"/>
@@ -38,19 +45,35 @@
         <Root level="INFO">
             <AppenderRef ref="Console"/>
         </Root>
-        <Logger name="aspectFixes" level="debug" additivity="false">
-            <AppenderRef ref="aspectFixes"/>
-            <AppenderRef ref="Console" level="info"/>
-        </Logger>
-        <Logger name="insertRefRgdId" level="debug" additivity="false">
-            <AppenderRef ref="insertRefRgdId"/>
-            <AppenderRef ref="Console" level="info"/>
-        </Logger>
-        <Logger name="fullAnnot" level="debug" additivity="false">
-            <AppenderRef ref="fullAnnot"/>
+        <Logger name="status" level="debug" additivity="false">
+            <AppenderRef ref="status"/>
             <AppenderRef ref="summary"/>
             <AppenderRef ref="synopsis"/>
             <AppenderRef ref="Console" level="info"/>
+        </Logger>
+        <Logger name="aspectFixes" level="debug" additivity="false">
+            <AppenderRef ref="aspectFixes"/>
+            <!-- WARN/ERROR also land in the status-side appenders -->
+            <AppenderRef ref="status" level="warn"/>
+            <AppenderRef ref="summary" level="warn"/>
+            <AppenderRef ref="synopsis" level="warn"/>
+            <AppenderRef ref="Console" level="warn"/>
+        </Logger>
+        <Logger name="insertRefRgdId" level="debug" additivity="false">
+            <AppenderRef ref="insertRefRgdId"/>
+            <!-- WARN/ERROR also land in the status-side appenders -->
+            <AppenderRef ref="status" level="warn"/>
+            <AppenderRef ref="summary" level="warn"/>
+            <AppenderRef ref="synopsis" level="warn"/>
+            <AppenderRef ref="Console" level="warn"/>
+        </Logger>
+        <Logger name="fullAnnot" level="debug" additivity="false">
+            <AppenderRef ref="fullAnnot"/>
+            <!-- WARN/ERROR also land in the status-side appenders -->
+            <AppenderRef ref="status" level="warn"/>
+            <AppenderRef ref="summary" level="warn"/>
+            <AppenderRef ref="synopsis" level="warn"/>
+            <AppenderRef ref="Console" level="warn"/>
         </Logger>
     </Loggers>
 </Configuration>

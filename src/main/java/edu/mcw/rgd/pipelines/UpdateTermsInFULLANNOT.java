@@ -27,7 +27,8 @@ public class UpdateTermsInFULLANNOT {
     private String version;
     private int lastModifiedBy;
     private UpdateTermsInFullAnnotDao dao = new UpdateTermsInFullAnnotDao();
-    Logger log = LogManager.getLogger("fullAnnot");
+    Logger log = LogManager.getLogger("status");
+    Logger logFullAnnot = LogManager.getLogger("fullAnnot");
     Logger logRef = LogManager.getLogger("insertRefRgdId");
     Logger logAspect = LogManager.getLogger("aspectFixes");
     private boolean fixMissingHardLinks;
@@ -81,14 +82,14 @@ public class UpdateTermsInFULLANNOT {
             // get the correct term name
             Term term = dao.getTermByAccId(annot.getTermAcc());
             if( term==null ) {
-                log.error("ERROR: Failed to read term "+annot.getTermAcc());
+                logFullAnnot.error("ERROR: Failed to read term "+annot.getTermAcc());
                 continue;
             }
 
             conflictAnnotsDeleted += checkForConflicts(annot);
 
             // log the changes
-            log.debug("UPDATE FAKey= "+annot.getKey()+" FATermAcc= " + annot.getTermAcc()+" FATerm= " + annot.getTerm()+" OntTerm= " + term.getTerm());
+            logFullAnnot.debug("UPDATE FAKey= "+annot.getKey()+" FATermAcc= " + annot.getTermAcc()+" FATerm= " + annot.getTerm()+" OntTerm= " + term.getTerm());
             String termInfo = "  "+annot.getTermAcc()+": ["+annot.getTerm()+"] ==> ["+term.getTerm()+"]";
             Integer cnt = updatedTermNames.get(termInfo);
             if( cnt==null ) {
@@ -111,10 +112,11 @@ public class UpdateTermsInFULLANNOT {
         if( conflictAnnotsDeleted!=0 )
             log.info("Duplicate Annotations Deleted = " + conflictAnnotsDeleted);
 
-        // dump changed terms with counts
         log.info("Updated term names = "+updatedTermNames.size()+"       (annotation count)");
+
+        // dump changed terms with counts to the detail log
         for( Map.Entry<String,Integer> entry: updatedTermNames.entrySet() ) {
-            log.info(entry.getKey()+"   ("+entry.getValue()+")");
+            logFullAnnot.info(entry.getKey()+"   ("+entry.getValue()+")");
         }
     }
 
@@ -152,7 +154,7 @@ public class UpdateTermsInFULLANNOT {
                         annot.setNotes(annot.getNotes()+"|"+annot2.getNotes());
                 }
             }
-            log.warn("CONFLICT DELETE "+annot2.dump("|"));
+            logFullAnnot.warn("CONFLICT DELETE "+annot2.dump("|"));
             dao.deleteAnnotation(annot2.getKey());
             conflictsResolved++;
         }
@@ -173,7 +175,7 @@ public class UpdateTermsInFULLANNOT {
             // get the correct term name
             Term term = dao.getTermByAccId(annot.getTermAcc());
             if( term==null ) {
-                log.warn("ERROR: Failed to read term "+annot.getTermAcc());
+                logFullAnnot.warn("ERROR: Failed to read term "+annot.getTermAcc());
                 continue;
             }
 
@@ -197,11 +199,7 @@ public class UpdateTermsInFULLANNOT {
         }
 
         log.info("Annotations with aspect updates in FULL_ANNOT = " + rowsUpdated);
-
-        // dump changed aspects
-        for( String updatedAspect: updatedAspects ) {
-            log.info(updatedAspect);
-        }
+        // per-aspect detail already written to aspect_fixes.log via logAspect; no need to re-dump here
     }
 
     /**
