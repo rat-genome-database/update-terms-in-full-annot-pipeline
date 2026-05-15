@@ -13,7 +13,7 @@ java {
     sourceCompatibility = JavaVersion.VERSION_17
     targetCompatibility = JavaVersion.VERSION_17
 }
-mainClassName = 'edu.mcw.rgd.pipelines.UpdateTermsInFULLANNOT'
+mainClassName = 'edu.mcw.rgd.pipelines.UpdateTermsInFullAnnot'
 String myAppName = 'update-terms-in-full-annot-pipeline'
 
 project.archivesBaseName = myAppName
@@ -28,7 +28,7 @@ dependencies {
     }
     implementation 'commons-net:commons-net:3.13.0'
     implementation 'org.apache.logging.log4j:log4j-core:2.25.4'
-    implementation 'com.oracle.database.jdbc:ojdbc11:23.26.1.0.0'
+    implementation 'com.oracle.database.jdbc:ojdbc11:23.26.2.0.0'
     implementation 'org.springframework:spring-jdbc:7.0.7'
 
     implementation fileTree(dir: 'lib', include: '*.jar')

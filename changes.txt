@@ -1,3 +1,6 @@
+May 15, 2026
+  renamed main class to UpdateTermsInFullAnnot (was UpdateTermsInFULLANNOT); removed dead updatedAspects collection; updated dependencies
+
 Apr 27, 2026
   refactored logging: status log for high-level events, detail logs for per-row events; updated dependencies
 

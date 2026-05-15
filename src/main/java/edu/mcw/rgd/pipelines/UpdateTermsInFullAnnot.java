@@ -22,7 +22,7 @@ import java.util.Date;
  * <p>
  * Also adds missing entries in RGD_REF_RGD_ID table for JOURNAL ARTICLE annotations.
  */
-public class UpdateTermsInFULLANNOT {
+public class UpdateTermsInFullAnnot {
 
     private String version;
     private int lastModifiedBy;
@@ -37,7 +37,7 @@ public class UpdateTermsInFULLANNOT {
 
         DefaultListableBeanFactory bf = new DefaultListableBeanFactory();
         new XmlBeanDefinitionReader(bf).loadBeanDefinitions(new FileSystemResource("properties/AppConfigure.xml"));
-        UpdateTermsInFULLANNOT manager = (UpdateTermsInFULLANNOT) (bf.getBean("manager"));
+        UpdateTermsInFullAnnot manager = (UpdateTermsInFullAnnot) (bf.getBean("manager"));
 
         try {
             manager.run();
@@ -166,7 +166,6 @@ public class UpdateTermsInFULLANNOT {
 
         Map<String,String> ontologyIdToAspectMap = dao.getOntologyIdToAspectMap();
 
-        Set<String> updatedAspects = new TreeSet<>();
         String msg;
 
         int rowsUpdated = 0;
@@ -186,7 +185,6 @@ public class UpdateTermsInFULLANNOT {
                 msg = "  RGD:"+annot.getAnnotatedObjectRgdId() + " ["+annot.getObjectSymbol()+"]  " +
                         annot.getTermAcc() + " ["+annot.getTerm()+"]: [" + annot.getAspect() + "] ==> [" + correctAspect + "]";
                 logAspect.info(msg);
-                updatedAspects.add(msg);
 
                 // update the term name in annotation object
                 annot.setLastModifiedDate(new Date());
