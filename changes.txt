@@ -1,3 +1,7 @@
+Oct 23, 2026
+  duplicate-annotation check compares all unique-key fields (added qualifier2, associated_with);
+    matches empty and null xref_source alike (updated rgdcore)
+
 Oct 20, 2026
   dev: migrated to postgres
 

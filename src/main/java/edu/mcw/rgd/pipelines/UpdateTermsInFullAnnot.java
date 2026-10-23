@@ -132,12 +132,17 @@ public class UpdateTermsInFullAnnot {
             if( annot2.getKey().equals(annot.getKey()) )
                 continue;
 
-            // skip annotations having different ref_rgd_id, with_info and qualifier
+            // skip annotations having different ref_rgd_id, with_info, qualifier, qualifier2 and associated_with
+            // (together with object, term, evidence and xref_source from the query, these are all unique key fields)
             if( !Utils.stringsAreEqual(annot.getQualifier(), annot2.getQualifier()) )
                 continue;
             if( !Utils.stringsAreEqual(annot.getWithInfo(), annot2.getWithInfo()) )
                 continue;
             if( !Utils.intsAreEqual(annot.getRefRgdId(), annot2.getRefRgdId()) )
+                continue;
+            if( !Utils.stringsAreEqual(annot.getQualifier2(), annot2.getQualifier2()) )
+                continue;
+            if( !Utils.stringsAreEqual(annot.getAssociatedWith(), annot2.getAssociatedWith()) )
                 continue;
 
             // if we got here, we have a conflict, that should be deleted
