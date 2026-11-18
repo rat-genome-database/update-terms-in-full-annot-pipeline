@@ -18,6 +18,13 @@ fi
 
 java -Dspring.config=$APPDIR/../properties/default_db2.xml \
     -Dlog4j.configurationFile=file://$APPDIR/properties/log4j2.xml \
-    -jar lib/${APPNAME}.jar  "$@" 2>&1 > cron.log
+    -jar lib/${APPNAME}.jar  "$@" > cron.log 2>&1
+EXIT_CODE=$?
+
+# on failure synopsis.log could be empty or incomplete, so mail cron.log: it has the error message and the stack trace
+if [ $EXIT_CODE -ne 0 ]; then
+    mailx -s "[$SERVER] Update Terms in FULL_ANNOT table FAILED (exit code $EXIT_CODE)" $ELIST < $APPDIR/cron.log
+    exit $EXIT_CODE
+fi
 
 mailx -s "[$SERVER] Update Terms in FULL_ANNOT table" $ELIST < $APPDIR/logs/synopsis.log
