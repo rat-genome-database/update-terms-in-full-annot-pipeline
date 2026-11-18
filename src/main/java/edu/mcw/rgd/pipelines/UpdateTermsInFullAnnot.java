@@ -77,7 +77,14 @@ public class UpdateTermsInFullAnnot {
 
         int rowsUpdated = 0;
         int conflictAnnotsDeleted = 0;
+        // keys of annotations deleted as conflicts; such annotations may still be on the stale list loaded below
+        // and must be skipped, otherwise they would in turn delete the annotation that was kept
+        Set<Integer> deletedAnnotKeys = new HashSet<>();
         for(Annotation annot: dao.getAnnotationsWithStaleTermNames() ) {
+
+            if( deletedAnnotKeys.contains(annot.getKey()) ) {
+                continue;
+            }
 
             // get the correct term name
             Term term = dao.getTermByAccId(annot.getTermAcc());
@@ -86,7 +93,7 @@ public class UpdateTermsInFullAnnot {
                 continue;
             }
 
-            conflictAnnotsDeleted += checkForConflicts(annot);
+            conflictAnnotsDeleted += checkForConflicts(annot, deletedAnnotKeys);
 
             // log the changes
             logFullAnnot.debug("UPDATE FAKey= "+annot.getKey()+" FATermAcc= " + annot.getTermAcc()+" FATerm= " + annot.getTerm()+" OntTerm= " + term.getTerm());
@@ -120,7 +127,7 @@ public class UpdateTermsInFullAnnot {
         }
     }
 
-    int checkForConflicts(Annotation annot) throws Exception {
+    int checkForConflicts(Annotation annot, Set<Integer> deletedAnnotKeys) throws Exception {
 
         // make sure that the object to be changed does not already contain a duplicate annotation
         List<Annotation> annots = dao.getAnnotations(annot.getAnnotatedObjectRgdId(), annot.getEvidence(), annot.getTermAcc(), annot.getXrefSource());
@@ -161,6 +168,7 @@ public class UpdateTermsInFullAnnot {
             }
             logFullAnnot.warn("CONFLICT DELETE "+annot2.dump("|"));
             dao.deleteAnnotation(annot2.getKey());
+            deletedAnnotKeys.add(annot2.getKey());
             conflictsResolved++;
         }
         return conflictsResolved;

@@ -1,3 +1,6 @@
+Nov 18, 2026
+  fixed conflict resolution deleting both annotations of a duplicate pair; run.sh emails FAILED (with cron.log) on error
+
 Oct 23, 2026
   duplicate-annotation check compares all unique-key fields (added qualifier2, associated_with);
     matches empty and null xref_source alike (updated rgdcore)
